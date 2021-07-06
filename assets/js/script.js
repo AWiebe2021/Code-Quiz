@@ -1,15 +1,16 @@
 // We start the game with a score of 0.
 var score = 0;
 var questionIndex=0;
-// var questionState = 'unanswered';
 var timerEl = document.getElementById('countdown');
 var scoreEl = document.getElementById('score');
 var timeLeft = 30;
 var outOfTime = false;
 var timeInterval;
+var msgDiv = document.querySelector('#msg');
 
-// timerEl.textContent = "";
-// scoreEl.textContent  =  "";
+// setup starter page
+// timerEl.textContent = " ";
+scoreEl.textContent  =  " ";
 var questionEl = document.getElementById("question");
 questionEl.innerText = 'Let us Begin';
 var answersEl = document.getElementById("answers");
@@ -21,6 +22,7 @@ var listItemEl = document.createElement("li");
 listItemEl.appendChild(document.createTextNode(""));
 var button = document.createElement("button");
 button.className = "answer-button";
+button.setAttribute('id','startQuiz')
 button.innerHTML = ("Start Quiz");
 button.onclick = startGame;
 listItemEl.appendChild(button);
@@ -68,14 +70,17 @@ function startGame(){
     {a: 'both conditional block and a single statement', c: 'Wrong'},
     {a: 'block that contains a single statement', c: 'Wrong'}
   ];
+  // reset conditions
+  outOfTime = false;
+  timeLeft = 30;
+  clearInterval(timeInterval);
+  questionIndex = 0;
+  score = 0;
+
+  // Start Timer
+  countdown();
   createQuestion();
-  // // reset conditions
-  // questionState = 'unanswered';
-  // outOfTime = false;
-  // timeLeft = 30;
-  // clearInterval(timeInterval);
-  // // Start Timer
-  // countdown();
+
 };
 
 function createQuestion(){
@@ -90,14 +95,8 @@ function createQuestion(){
   for (var answerIndex = 0; answerIndex < answersArray[questionIndex].length; answerIndex++) {
     createAnswers(answerIndex);
   };
-  // reset conditions
-  // questionState = 'unanswered';
-  outOfTime = false;
-  timeLeft = 30;
-  clearInterval(timeInterval);
-  
-  // Start Timer
-  countdown();
+
+ 
 };
 
 
@@ -116,7 +115,7 @@ function createAnswers(answerIndex){
 
 // Timer that counts down from 30
 function countdown() {
-  outOfTime = false;    
+  // outOfTime = false;    
   timeInterval = setInterval(function() {
     if (timeLeft > 1) {
       timerEl.textContent = timeLeft + ' seconds remaining';
@@ -128,7 +127,6 @@ function countdown() {
        timerEl.textContent = timeLeft;
        clearInterval(timeInterval);
        outOfTime = true;
-      //  questionState = 'answered';
        scoreAnswer();
     };
   }, 1000);
@@ -137,39 +135,135 @@ function countdown() {
 function scoreAnswer(evt){
   if (outOfTime){
     timerEl.textContent = 'OOT';
+    displayMessage('error', 'Ran out of time');
     // alert('You are out of time')
   }else{
-    // if (questionState === 'unanswered'){
-      conclusion = evt.currentTarget.getAttribute("conclusion")
-      if((conclusion === "Correct")){
-        score++;
-      };
-      // alert('You got it ' + conclusion);
-      // questionState = 'answered';
-    // }else{
-    //   // alert('This Question has been answered');
-    // };
+    conclusion = evt.currentTarget.getAttribute("conclusion");
+    if((conclusion === "Correct")){
+      score++;
+      displayMessage('success', 'Last answer was ' + conclusion);
+    }else{
+      displayMessage('error', 'Last answer was ' + conclusion);
+    }
+    // alert('You got it ' + conclusion);
   };
-  scoreEl.textContent  =  "Your Score: " + score + "/" + (questionIndex);
-  if (questionIndex < questionsArray.length){
-    createQuestion();
+  scoreEl.textContent  =  "Your Score: " + score + "/" + (questionIndex + 1);
+  if ((questionIndex < questionsArray.length - 1) && !(outOfTime)){
     questionIndex++;
+    createQuestion();
   }else{
     endGame();
   }
 };     
 
+function submitScore(){
+
+  var initials = document.querySelector('#inputId').value;
+  var scoreString = score + "/" + (questionIndex + 1);
+  let current = new Date();
+  let cDate = current.getFullYear() + '-' + (current.getMonth() + 1) + '-' + current.getDate();
+  let cTime = current.getHours() + ":" + current.getMinutes() + ":" + current.getSeconds();
+  let time = cDate + ' ' + cTime;
+
+  if (initials === '') {
+    displayMessage('error', 'initials cannot be blank');
+  } else {
+    displayMessage('success', 'Registered successfully');
+
+    // Save data
+    localStorage.setItem('initials', initials);
+    localStorage.setItem('score', scoreString);
+    localStorage.setItem('time', time);
+
+    // Render the last registered quiz
+    renderLastScore();
+  }
+}
+
+function renderLastScore() {
+  // Retrieve the data
+  var initials = localStorage.getItem('initials');
+  var scoreString = localStorage.getItem('score');
+  var time = localStorage.getItem('time');
+  var answersEl = document.getElementById("answers");
+
+  timerEl.textContent = " ";
+  scoreEl.textContent  =  " ";
+  var questionEl = document.getElementById("question");
+  questionEl.innerText = ' ';
+  while (answersEl.hasChildNodes()) {  
+    answersEl.removeChild(answersEl.firstChild);
+  };
+
+  var listItemEl2 = document.createElement("li");
+  listItemEl2.appendChild(document.createTextNode("Last Registered quiz"));
+  answersEl.appendChild(listItemEl2);
+  
+  var listItemEl2 = document.createElement("li");
+  listItemEl2.setAttribute('class','data');
+  listItemEl2.appendChild(document.createTextNode("User: " + initials));
+  answersEl.appendChild(listItemEl2);
+  
+  var listItemEl2 = document.createElement("li");
+  listItemEl2.setAttribute('class','data');
+  listItemEl2.appendChild(document.createTextNode("Score: " + scoreString));
+  answersEl.appendChild(listItemEl2);
+  
+  var listItemEl2 = document.createElement("li");
+  listItemEl2.setAttribute('class','data');
+  listItemEl2.appendChild(document.createTextNode("Time: " + time));
+  answersEl.appendChild(listItemEl2);
+  
+  var button = document.createElement("button");
+  button.className = "answer-button";
+  button.setAttribute('id','startOver');
+  button.innerHTML = ('Start Quiz Over');
+  button.onclick = startGame;
+
+  // answersEl.appendChild(listItemEl);
+  answersEl.appendChild(button);
+
+  clearInterval(timeInterval);
+}
+
+function displayMessage(type, message) {
+  msgDiv.textContent = message;
+  msgDiv.setAttribute('class', type);
+}
+
 function endGame(){
-  timerEl.textContent = "";
+  if (outOfTime){
+    timerEl.textContent = "Out of Time";
+  }else{
+    timerEl.textContent = "";
+  };
   scoreEl.textContent  =  "";
   var questionEl = document.getElementById("question");
-  questionEl.innerText = 'All Done';
+  questionEl.innerText = "Your Score: " + score + "/" + (questionIndex + 1);
   var answersEl = document.getElementById("answers");
   while (answersEl.hasChildNodes()) {  
     answersEl.removeChild(answersEl.firstChild);
   };
-  var listItemEl = document.createElement("li");
-  listItemEl.appendChild(document.createTextNode("Your Score: " + score + "/" + (questionIndex)));
-  answersEl.appendChild(listItemEl);
+  // var listItemEl = document.createElement("li");
+  // listItemEl.appendChild(document.createTextNode("Your Score: " + score + "/" + (questionIndex + 1)));
+  var listItemEl2 = document.createElement("li");
+  listItemEl2.appendChild(document.createTextNode("Enter your Initials"));
+
+  var mi = document.createElement("input");
+  mi.setAttribute('type', 'text');
+  // mi.setAttribute('value', 'initials');
+  mi.setAttribute('id','inputId');
+
+  var button = document.createElement("button");
+  button.className = "answer-button";
+  button.innerHTML = ('Submit');
+  button.onclick = submitScore;
+  listItemEl.appendChild(button);
+
+  // answersEl.appendChild(listItemEl);
+  answersEl.appendChild(listItemEl2);
+  answersEl.appendChild(mi);
+  answersEl.appendChild(button);
+
   clearInterval(timeInterval);
 };
