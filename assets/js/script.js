@@ -3,7 +3,7 @@ var score = 0;
 var questionIndex=0;
 var timerEl = document.getElementById('countdown');
 var scoreEl = document.getElementById('score');
-var timeLeft = 30;
+var timeLeft = 75;
 var outOfTime = false;
 var timeInterval;
 var msgDiv = document.querySelector('#msg');
@@ -21,7 +21,7 @@ while (answersEl.hasChildNodes()) {
 var listItemEl = document.createElement("li");
 listItemEl.appendChild(document.createTextNode(""));
 var button = document.createElement("button");
-button.className = "answer-button";
+button.className = "btn";
 button.setAttribute('id','startQuiz')
 button.innerHTML = ("Start Quiz");
 button.onclick = startGame;
@@ -72,7 +72,7 @@ function startGame(){
   ];
   // reset conditions
   outOfTime = false;
-  timeLeft = 30;
+  timeLeft = 75;
   clearInterval(timeInterval);
   questionIndex = 0;
   score = 0;
@@ -99,13 +99,13 @@ function createQuestion(){
  
 };
 
-
+//  Create new answer buttons
 function createAnswers(answerIndex){
   var answersEl = document.getElementById("answers");
   var listItemEl = document.createElement("li");
   listItemEl.appendChild(document.createTextNode(""));
   var button = document.createElement("button");
-  button.className = "answer-button";
+  button.className = "btn";
   button.innerHTML = (answersArray[questionIndex][answerIndex].a);
   button.setAttribute("conclusion",(answersArray[questionIndex][answerIndex].c));
   button.onclick = scoreAnswer;
@@ -113,9 +113,8 @@ function createAnswers(answerIndex){
   answersEl.appendChild(listItemEl);
 };
 
-// Timer that counts down from 30
+// Timer that counts down
 function countdown() {
-  // outOfTime = false;    
   timeInterval = setInterval(function() {
     if (timeLeft > 1) {
       timerEl.textContent = timeLeft + ' seconds remaining';
@@ -132,21 +131,26 @@ function countdown() {
   }, 1000);
 };
 
+//Score the answer, if answered
 function scoreAnswer(evt){
+//didn't answer ran out of time
   if (outOfTime){
     timerEl.textContent = 'OOT';
     displayMessage('error', 'Ran out of time');
     // alert('You are out of time')
   }else{
+    // right or wrong
     conclusion = evt.currentTarget.getAttribute("conclusion");
     if((conclusion === "Correct")){
       score++;
       displayMessage('success', 'Last answer was ' + conclusion);
     }else{
-      displayMessage('error', 'Last answer was ' + conclusion);
+      timeLeft= timeLeft - 15;
+      displayMessage('error', 'Last answer was ' + conclusion + ' 15 seconds deducted');
     }
     // alert('You got it ' + conclusion);
   };
+//right or wrong or ranout of time, continue or end
   scoreEl.textContent  =  "Your Score: " + score + "/" + (questionIndex + 1);
   if ((questionIndex < questionsArray.length - 1) && !(outOfTime)){
     questionIndex++;
@@ -156,8 +160,8 @@ function scoreAnswer(evt){
   }
 };     
 
+// save data action
 function submitScore(){
-
   var initials = document.querySelector('#inputId').value;
   var scoreString = score + "/" + (questionIndex + 1);
   let current = new Date();
@@ -180,8 +184,8 @@ function submitScore(){
   }
 }
 
+// Retrieve the data action
 function renderLastScore() {
-  // Retrieve the data
   var initials = localStorage.getItem('initials');
   var scoreString = localStorage.getItem('score');
   var time = localStorage.getItem('time');
@@ -215,22 +219,23 @@ function renderLastScore() {
   answersEl.appendChild(listItemEl2);
   
   var button = document.createElement("button");
-  button.className = "answer-button";
+  button.className = "btn";
   button.setAttribute('id','startOver');
   button.innerHTML = ('Start Quiz Over');
   button.onclick = startGame;
 
-  // answersEl.appendChild(listItemEl);
   answersEl.appendChild(button);
 
   clearInterval(timeInterval);
 }
 
+//show small info text
 function displayMessage(type, message) {
   msgDiv.textContent = message;
   msgDiv.setAttribute('class', type);
 }
 
+//end of game page
 function endGame(){
   if (outOfTime){
     timerEl.textContent = "Out of Time";
@@ -244,26 +249,23 @@ function endGame(){
   while (answersEl.hasChildNodes()) {  
     answersEl.removeChild(answersEl.firstChild);
   };
-  // var listItemEl = document.createElement("li");
-  // listItemEl.appendChild(document.createTextNode("Your Score: " + score + "/" + (questionIndex + 1)));
+//create label
   var listItemEl2 = document.createElement("li");
   listItemEl2.appendChild(document.createTextNode("Enter your Initials"));
-
+//creat input box
   var mi = document.createElement("input");
   mi.setAttribute('type', 'text');
-  // mi.setAttribute('value', 'initials');
   mi.setAttribute('id','inputId');
-
+//create button
   var button = document.createElement("button");
-  button.className = "answer-button";
+  button.className = "btn";
   button.innerHTML = ('Submit');
   button.onclick = submitScore;
   listItemEl.appendChild(button);
-
-  // answersEl.appendChild(listItemEl);
+//append to the dom
   answersEl.appendChild(listItemEl2);
   answersEl.appendChild(mi);
   answersEl.appendChild(button);
-
+//stop timer
   clearInterval(timeInterval);
 };
