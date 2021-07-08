@@ -74,6 +74,7 @@ function startGame(){
   clearInterval(timeInterval);
   questionIndex = 0;
   score = 0;
+  displayMessage('success', ' ');
 
   // Start Timer
   countdown();
@@ -134,7 +135,7 @@ function scoreAnswer(evt){
 //didn't answer, ran out of time
   if (outOfTime){
     timerEl.textContent = 'OOT';
-    displayMessage('error', 'Ran out of time');
+    displayMessage('error', (msgDiv.textContent + ', Ran out of time'));
     // alert('You are out of time')
   }else{
     // answered check right or wrong
