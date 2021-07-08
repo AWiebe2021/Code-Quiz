@@ -1,4 +1,3 @@
-// We start the game with a score of 0.
 var score = 0;
 var questionIndex=0;
 var timerEl = document.getElementById('countdown');
@@ -9,7 +8,6 @@ var timeInterval;
 var msgDiv = document.querySelector('#msg');
 
 // setup starter page
-// timerEl.textContent = " ";
 scoreEl.textContent  =  " ";
 var questionEl = document.getElementById("question");
 questionEl.innerText = 'Let us Begin';
@@ -33,12 +31,12 @@ function startGame(){
   questionsArray = new Array();
   questionsArray = [
     'Which type of JavaScript language is ___.',
-    'Which of the following is the correct output for the following JavaScript code: \n var x=5,y=1 \n var obj ={ x:10} \n with(obj) \n { \n  alert(y) \n }',
+    'When interpreter encounters an empty statements, what it will do:',
     'Which one of the following also known as Conditional Expression:',
-    'Among the following given JavaScript snipped codes, which is more efficient: \n Code A \n for(var number=10;number>=1;number--) \n  { \n    document.writeln(number);  \n  } \n  Code B \n  var number=10;  \n  while(number>=1)  \n  {  \n    document.writeln(number);  \n    number++;  \n  }',
+    'The "function" and " var" are known as:',
     'In JavaScript, what is a block of statement?'
   ];
-  // The array of answers for the game.
+  // The 2D array of answers (as objects) for the game.
   answersArray= new Array();
   answersArray[0] = [
     {a: 'Object-Oriented', c: 'Wrong'},
@@ -53,16 +51,16 @@ function startGame(){
     {a: '5', c: 'Wrong'}
   ];
   answersArray[2] = [
-    {a: 'Alternative to if-else', c: 'Wrong'},
-    {a: 'Switch statement', c: 'Wrong'},
-    {a: 'If-then-else statement', c: 'Wrong'},
-    {a: 'immediate if', c: 'Correct'}
+    {a: 'Shows a warning', c: 'Wrong'},
+    {a: 'Prompts to complete the statement', c: 'Wrong'},
+    {a: 'Throws an error', c: 'Wrong'},
+    {a: 'Ignores the statements', c: 'Correct'}
   ];
   answersArray[3] = [
-    {a: 'Code 1', c: 'Correct'},
-    {a: 'Code 2', c: 'Wrong'},
-    {a: 'Both Code 1 and Code 2', c: 'Wrong'},
-    {a: 'Cannot Compare', c: 'Wrong'}
+    {a: 'Keywords', c: 'Wrong'},
+    {a: 'Data types', c: 'Wrong'},
+    {a: 'Declaration statements', c: 'Correct'},
+    {a: 'Prototypes', c: 'Wrong'}
   ];
   answersArray[4] = [
     {a: 'Conditional block', c: 'Wrong'},
@@ -99,7 +97,7 @@ function createQuestion(){
  
 };
 
-//  Create new answer buttons
+//  Create new list of answer buttons
 function createAnswers(answerIndex){
   var answersEl = document.getElementById("answers");
   var listItemEl = document.createElement("li");
@@ -113,7 +111,7 @@ function createAnswers(answerIndex){
   answersEl.appendChild(listItemEl);
 };
 
-// Timer that counts down
+// Timer that counts down in seconds
 function countdown() {
   timeInterval = setInterval(function() {
     if (timeLeft > 1) {
@@ -131,15 +129,15 @@ function countdown() {
   }, 1000);
 };
 
-//Score the answer, if answered
+//Score the answer, if answered or not
 function scoreAnswer(evt){
-//didn't answer ran out of time
+//didn't answer, ran out of time
   if (outOfTime){
     timerEl.textContent = 'OOT';
     displayMessage('error', 'Ran out of time');
     // alert('You are out of time')
   }else{
-    // right or wrong
+    // answered check right or wrong
     conclusion = evt.currentTarget.getAttribute("conclusion");
     if((conclusion === "Correct")){
       score++;
@@ -184,7 +182,7 @@ function submitScore(){
   }
 }
 
-// Retrieve the data action
+// Retrieve the data action (whole page)
 function renderLastScore() {
   var initials = localStorage.getItem('initials');
   var scoreString = localStorage.getItem('score');
@@ -235,7 +233,7 @@ function displayMessage(type, message) {
   msgDiv.setAttribute('class', type);
 }
 
-//end of game page
+//end of game (whole page)
 function endGame(){
   if (outOfTime){
     timerEl.textContent = "Out of Time";
