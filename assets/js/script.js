@@ -192,6 +192,7 @@ function renderLastScore() {
 
   timerEl.textContent = " ";
   scoreEl.textContent  =  " ";
+  displayMessage('success', 'Last Successfully Registered Quiz');
   var questionEl = document.getElementById("question");
   questionEl.innerText = ' ';
   while (answersEl.hasChildNodes()) {  
