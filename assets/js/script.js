@@ -45,16 +45,16 @@ function startGame(){
     {a: 'High-level', c: 'Wrong'}
   ];
   answersArray[1] = [
-    {a: '1', c: 'Correct'},
-    {a: 'Error', c: 'Wrong'},
-    {a: '10', c: 'Wrong'},
-    {a: '5', c: 'Wrong'}
-  ];
-  answersArray[2] = [
     {a: 'Shows a warning', c: 'Wrong'},
     {a: 'Prompts to complete the statement', c: 'Wrong'},
     {a: 'Throws an error', c: 'Wrong'},
     {a: 'Ignores the statements', c: 'Correct'}
+  ];
+  answersArray[2] = [
+    {a: 'Alternative to if-else', c: 'Wrong'},
+    {a: 'Switch statement', c: 'Wrong'},
+    {a: 'If-then-else statement', c: 'Wrong'},
+    {a: 'Immediate if', c: 'Correct'}
   ];
   answersArray[3] = [
     {a: 'Keywords', c: 'Wrong'},
@@ -64,9 +64,9 @@ function startGame(){
   ];
   answersArray[4] = [
     {a: 'Conditional block', c: 'Wrong'},
-    {a: 'block that combines a number of statements into a single compound statement', c: 'Correct'},
-    {a: 'both conditional block and a single statement', c: 'Wrong'},
-    {a: 'block that contains a single statement', c: 'Wrong'}
+    {a: 'Block that combines a number of statements into a single compound statement', c: 'Correct'},
+    {a: 'Both conditional block and a single statement', c: 'Wrong'},
+    {a: 'Block that contains a single statement', c: 'Wrong'}
   ];
   // reset conditions
   outOfTime = false;
