@@ -5,7 +5,7 @@
   :root {
     --primary: #44e9ff;
     --secondary: #497980;
-    --tertiary: rgb(192, 246, 253);
+    --tertiary: yellow;
     --grey: #333;
     font-size: 62.5%;
   }
@@ -25,6 +25,7 @@
     background: var(--secondary);
     padding: 30px 25px;
     border-bottom: 5px solid var(--primary);
+    height: 162px;
   }
   
   
@@ -84,6 +85,7 @@
   .btn:hover {
     box-shadow: 0 2px var(--grey);
     top: -2px;
+    background: var(--tertiary);
   }
   .btn:active {
     box-shadow: 0 0px var(--grey);
@@ -120,8 +122,24 @@
     margin: 13px 13px 13px 0px;
   }
 
-  #lastScore{
+  #highScore{
     position: absolute;
     left: 80%;
     top: 40px;
+  }
+
+  #highScore:active {
+    box-shadow: 0 0px var(--grey);
+    top: 43px;
+  }
+
+  #clearScore{
+    position: absolute;
+    left: 80%;
+    top: 95px;
+  }
+
+  #clearScore:active {
+    box-shadow: 0 0px var(--grey);
+    top: 98px;
   }

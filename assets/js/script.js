@@ -176,13 +176,13 @@ function submitScore(){
     localStorage.setItem('score', scoreString);
     localStorage.setItem('time', time);
 
-    // Render the last registered quiz
-    renderLastScore();
+    // Render the high registered quiz
+    renderHighScore();
   }
 }
 
 // Retrieve the data action (whole page)
-function renderLastScore() {
+function renderHighScore() {
   var initials = localStorage.getItem('initials');
   var scoreString = localStorage.getItem('score');
   var time = localStorage.getItem('time');
@@ -231,6 +231,12 @@ function renderLastScore() {
 function displayMessage(type, message) {
   msgDiv.textContent = message;
   msgDiv.setAttribute('class', type);
+}
+
+//show small info text
+function clearScore() {
+  localStorage.removeItem('score');
+  displayMessage('success','Score cleared');
 }
 
 //end of game (whole page)
