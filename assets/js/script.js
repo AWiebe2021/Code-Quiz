@@ -94,8 +94,6 @@ function createQuestion(){
   for (var answerIndex = 0; answerIndex < answersArray[questionIndex].length; answerIndex++) {
     createAnswers(answerIndex);
   };
-
- 
 };
 
 //  Create new list of answer buttons
@@ -251,17 +249,28 @@ function endGame(){
   };
 //create label
   var listItemEl2 = document.createElement("li");
-  listItemEl2.appendChild(document.createTextNode("Enter your Initials"));
-//creat input box
-  var mi = document.createElement("input");
-  mi.setAttribute('type', 'text');
-  mi.setAttribute('id','inputId');
-//create button
-  var button = document.createElement("button");
-  button.className = "btn";
-  button.innerHTML = ('Submit');
-  button.onclick = submitScore;
-  listItemEl.appendChild(button);
+  var scoreString = localStorage.getItem('score');
+  //creat input box if the score is Higher
+  if (scoreString === null){
+    scoreString = "0";
+  };
+  if (score > (scoreString.charAt(0))){
+    listItemEl2.appendChild(document.createTextNode("High Score - Enter your Initials"));
+    var mi = document.createElement("input");
+    mi.setAttribute('type', 'text');
+    mi.setAttribute('id','inputId');
+    //create button
+    var button = document.createElement("button");
+    button.className = "btn";
+    button.innerHTML = ('Submit');
+    button.onclick = submitScore;
+    listItemEl.appendChild(button);
+    displayMessage('success','Highest score')
+  }else{
+    listItemEl2.appendChild(document.createTextNode("Score is not the highest"));
+    displayMessage('error','not the higher score')
+  };
+  
 //append to the dom
   answersEl.appendChild(listItemEl2);
   answersEl.appendChild(mi);
