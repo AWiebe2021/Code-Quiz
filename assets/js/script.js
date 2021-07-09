@@ -215,14 +215,14 @@ function renderLastScore() {
   listItemEl2.setAttribute('class','data');
   listItemEl2.appendChild(document.createTextNode("Time: " + time));
   answersEl.appendChild(listItemEl2);
-  
+ 
+    //add restart button
   var button = document.createElement("button");
   button.className = "btn";
   button.setAttribute('id','startOver');
   button.innerHTML = ('Start Quiz Over');
   button.onclick = startGame;
-
-  answersEl.appendChild(button);
+  answersEl.appendChild(button); 
 
   clearInterval(timeInterval);
 }
@@ -259,22 +259,29 @@ function endGame(){
     var mi = document.createElement("input");
     mi.setAttribute('type', 'text');
     mi.setAttribute('id','inputId');
+    answersEl.appendChild(mi);
     //create button
-    var button = document.createElement("button");
-    button.className = "btn";
-    button.innerHTML = ('Submit');
-    button.onclick = submitScore;
-    listItemEl.appendChild(button);
+    var submitButton = document.createElement("button");
+    submitButton.className = "btn";
+    submitButton.innerHTML = ('Submit');
+    submitButton.onclick = submitScore;
+    answersEl.appendChild(submitButton);
     displayMessage('success','Highest score')
   }else{
     listItemEl2.appendChild(document.createTextNode("Score is not the highest"));
     displayMessage('error','not the higher score')
+     //add restart button
+    var button = document.createElement("button");
+    button.className = "btn";
+    button.setAttribute('id','startOver');
+    button.innerHTML = ('Start Quiz Over');
+    button.onclick = startGame;
+    answersEl.appendChild(button); 
   };
-  
+ 
 //append to the dom
   answersEl.appendChild(listItemEl2);
-  answersEl.appendChild(mi);
-  answersEl.appendChild(button);
+
 //stop timer
   clearInterval(timeInterval);
 };
